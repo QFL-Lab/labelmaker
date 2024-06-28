@@ -1,0 +1,15 @@
+<!doctype html>
+<html>
+<head><title>Dymo Labelmanager PnP</title></head>
+<body>
+  <h2>Enter Text for the label</h2>
+  <form method="post">
+    <textarea name="text_content" rows="2" style="width: 350px;"></textarea><br>
+    <input type="submit" value="Submit">
+    <!-- Display the result here -->
+    <div>
+        {{ result|safe }}
+    </div>
+  </form>
+</body>
+</html>
