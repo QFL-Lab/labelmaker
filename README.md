@@ -21,9 +21,8 @@ We provide a Systemd Service unit to run this under Ubuntu.
 Install the service with `install.sh`.
 After installing the website is accessible via http://localhost:5000 on the local machine.
 ```bash
-git clone ...
+git clone https://github.com/QFL-Lab/labelmaker
 cd labelmanager
-
 
 chmod +x install.sh start.sh
 ./install.sh
