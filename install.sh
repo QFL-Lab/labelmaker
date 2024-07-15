@@ -1,5 +1,6 @@
 #!/bin/bash
 echo "Installing drivers..."
+sudo apt update
 sudo apt install ubuntu-drivers-common
 sudo ubuntu-drivers autoinstall
 
