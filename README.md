@@ -12,7 +12,7 @@ It fits Dymo D1 cartriges.
 We use 9mm labels, which is hardcoded in the `labelmaker.py`, but can be changed
 
 ### Cable labelling
-We use [TRU COMPONENTS TC-MC1203-100](https://www.conrad.de/de/p/tru-components-tc-mc1203-100-kabelmarkierer-montage-art-kabelbinder-beschriftungsflaeche-32-x-11-mm-natur-100-st-3013928.html?refresh=true) zi ties to attach the labels to cables. The frontend checks if the labelsize will fit the zip tie panel.
+We use [TRU COMPONENTS TC-MC1203-100](https://www.conrad.de/de/p/tru-components-tc-mc1203-100-kabelmarkierer-montage-art-kabelbinder-beschriftungsflaeche-32-x-11-mm-natur-100-st-3013928.html?refresh=true) zip ties to attach the labels to cables. The frontend checks if the labelsize will fit the zip tie panel.
 
 **Attention**: The value for the cutting margin option is wrong
 
