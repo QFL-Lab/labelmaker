@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
-from flask import Flask, request, render_template
+from flask import Flask, request, render_template, jsonify
 from labelle.lib.devices.device_manager import (
-    DeviceManager, 
+    DeviceManager,
     DeviceManagerNoDevices
 )
+from labelle.lib.constants import PIXELS_PER_MM
 from labelle.lib.devices.dymo_labeler import DymoLabeler
 from labelle.lib.render_engines import (
     HorizontallyCombinedRenderEngine,
@@ -18,10 +19,9 @@ from labelle.lib.constants import (
 )
 from labelle.lib.font_config import (
     DefaultFontStyle,
-    NoFontFound,
-    get_available_fonts,
     get_font_path,
 )
+from math import ceil
 
 app = Flask(__name__)
 
@@ -35,7 +35,7 @@ def get_device_manager() -> DeviceManager:
     return device_manager
 
 
-def print_text(text, tape_size_mm=9):
+def print_text(text: str, printOut: bool, tape_size_mm=9) -> str:
     device_manager = get_device_manager()
     device = device_manager.find_and_select_device()
     device.setup()
@@ -45,7 +45,6 @@ def print_text(text, tape_size_mm=9):
     font_path = get_font_path(font=None, style=DefaultFontStyle)
 
     lines = len(text.splitlines())
-    print(lines)
 
     render_engines: list[RenderEngine] = []
     render_engines.append(
@@ -74,26 +73,37 @@ def print_text(text, tape_size_mm=9):
             min_width_px=0,
         )
     bitmap, _ = render.render_with_meta(render_context)
+    if printOut:
+        dymo_labeler.print(bitmap)
 
-    dymo_labeler.print(bitmap)
+    label_length = bitmap.size[0] / PIXELS_PER_MM
+    margin = DEFAULT_MARGIN_PX / PIXELS_PER_MM * 2
+    notStr = "<strong>not</strong> "
+    label_fit = "" if label_length < 32 else notStr
+    label_fit_cut = "" if (label_length - margin) < 32 else notStr
+    return {'label_length': f"{ceil(label_length):3.0f}",
+            'label_fit': label_fit,
+            'label_fit_cut': label_fit_cut}
 
 
 @app.route('/', methods=['GET', 'POST'])
 def handle_text():
-    output = ""
+    output = {'error-msg': ""}
     if request.method == 'POST':
         text_content = request.form['text_content']
+        printOut = True if request.form['submit_type'] == 'manual' else False
         # Call the method that handles the text content
         try:
-            print_text(text_content)
+            output = print_text(text_content, printOut)
         except Exception as e:
-            output = f"Error: {e}"
-    return render_template('template.html', result=output)
-
-
+            output['error_msg'] = f"Error: {e}"
+        return jsonify(result=output)
+    return render_template('template.html',
+                           label_length="",
+                           label_fit="",
+                           label_fit_cut="",
+                           error_msg="")
 
 
 if __name__ == '__main__':
     app.run(debug=True)
-
-
