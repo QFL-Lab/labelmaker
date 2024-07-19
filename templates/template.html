@@ -21,6 +21,13 @@
     </div>
   </form>
 
+  <!-- Button to add text to the textarea -->
+  <button onclick="addTextToTextarea(this.textContent)">∞</button>
+  <button onclick="addTextToTextarea(this.textContent)">↑</button>
+  <button onclick="addTextToTextarea(this.textContent)">↓</button>
+  <button onclick="addTextToTextarea(this.textContent)">←</button>
+  <button onclick="addTextToTextarea(this.textContent)">→</button>
+
   <script>
     document.getElementById('textContent').addEventListener('input', function() {
         document.getElementById('submitType').value = 'automatic';
@@ -50,6 +57,10 @@
         })
         .catch(error => console.error('Error:', error));
     }
+    // Function to add text to the textarea
+    function addTextToTextarea(text) {
+      document.getElementById('textContent').value += text;
+  }
   </script>
 </body>
 </html>
